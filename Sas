@@ -1,0 +1,62 @@
+SAS (Statistical Analysis System)
+SAS is a software used for statistical analysis, and report generation.
+Structure of a SAS Program
+A SAS program is composed of two primary steps:
+•	DATA Step – Creates or modifies datasets.
+•	PROC Step – Analyzes and processes data.
+SAS Variables
+There are two types of SAS variables:
+•	Numeric – Stores numbers.
+•	Character – Stores text or alphanumeric values.
+SAS Syntax Rules
+Every SAS statement ends with a semicolon (;). Not doing so will result in a syntax error.
+RUN
+The RUN statement in SAS is used to execute a step DATA or PROC and signal its completion.
+SAS Datasets
+SAS datasets are structured tables used in the storage of data. In SAS Rows are knowns as Observations and columns as Variables. 
+SAS datasets can be:
+•	Temporary – Stored in the WORK library and cleared when the session ends.
+•	Permanent – Placed in a specific library for future retrieval
+Libraries in SAS
+A library in SAS is a storage location for datasets. You can build a library with the LIBNAME statement.
+Syntax:
+•	LIBNAME <name_of_library> "<Path_of_the_folder>";
+Example:
+•	LIBNAME Test "C:\SASData";
+Here, Test is the library name where datasets will be stored.
+Rules for Writing SAS Library Names:
+1.	Must be 1 to 8 characters long.  
+2.	Can only include letters (A-Z) and numbers (0-9).  
+3.	Must begin with a letter (A-Z), not a number.  
+4.	Cannot contain special characters or spaces.  
+5.	 Library names are not case-sensitive.
+SET Statement in SAS
+The SET statement is used to read data from an existing dataset into a new dataset. It is commonly used in the DATA step.
+•	DATA Class_data;
+ SET sashelp.class;
+ RUN;
+•	This creates a copy of the class dataset from the sashelp library and stores it in Class_data in the default WORK library.
+To save the dataset in a specific library:
+•	DATA Test.Class_data;
+SET sashelp.class;
+RUN;
+•	Here, Test is the library where Class_data is stored.
+Writing Data in SAS
+You can create a dataset in SAS using the DATA step along with the INPUT statement and DATALINES.
+DATA employees;
+    INPUT ID Name $ Age Salary;
+    DATALINES;
+    101 ABC 30 50000
+    102 XYZ 28 60000
+    103 LMN 35 75000
+    ;
+RUN;
+PROC PRINT DATA=employees;
+RUN;
+Here INPUT statement – is used to define the variables used in the dataset. 
+	 ID, Age, and Salary are numerical variables. 
+	 Name $ is a character variable (the $ symbol signifies a character variable).
+•	DATALINES statement – Used to enter raw data manually.
+•	RUN statement – Executes the data step.
+Using PROC Step to Print Data
+PROC PRINT statement to display the data. This will print the employees dataset in the output window.
