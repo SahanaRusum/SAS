@@ -1,0 +1,42 @@
+Import and export
+import and export they both are used to move data in and out of SAS from external files like Excel, CSV, or text files. 
+Here we use proc import and proc export method. 
+For importing:
+For csv file:
+proc import datafile="C:\yourpath\file.csv" ("Path of the file to be included")
+     out=mydata
+     dbms=csv
+     replace;
+     getnames=yes;
+run;
+For excel file: Xlsx extension is used and we can also specify what sheet we need to import. 
+proc import datafile="C:\yourpath\file.xlsx"
+     out=mydata
+     dbms=xlsx
+     replace;
+     sheet="Sheet1";
+     getnames=yes;
+run;
+datafile = path to our input file
+out =  name of the SAS dataset to create
+dbms = file type (csv, xlsx, etc.)
+replace = overwrite the dataset if it already exists
+getnames= yes (to use the first row as variable names, by defualt it is yes)
+For exporting: 
+CSV file:
+proc export data=mydata
+     outfile="C:\yourpath\output.csv"
+     dbms=csv
+     replace;
+run;
+Excel file:
+proc export data=mydata
+     outfile="C:\yourpath\output.xlsx"
+     dbms=xlsx
+     replace;
+     sheet="ExportedSheet";
+run;
+data =  the SAS dataset that we're exporting.
+outfile = file path and name to save it as. Such as here the name of my file whether it's csv or excel it is output
+dbms =  type of file to export to.
+sheet = for Excel, name of the worksheet.
