@@ -1,0 +1,68 @@
+We also have conditional statements such as IF THEN, ELSE IF THEN, and ELSE THEN
+The IF..ELSE statement in SAS is used to make decisions in code. It let's to execute certain blocks of code only if specific conditions are met.
+The basic syntax is:
+IF condition THEN action;
+ELSE IF another_condition THEN another_action;
+ELSE default_action;
+The THEN keyword helps SAS execute an action (like assigning a value to a variable), which can result in creating a new column in the dataset, if the condition is true
+
+For instance, in a dataset named student, we need to execute these conditions. We use if else statements. 
+If the student's score is 90 or more, they get an A.
+If not, but it’s 80 or more, they get a B.
+If not, but it’s 70 or more, they get a C.
+Otherwise, they get an F.
+
+data grades;
+   set students;
+   if score >= 90 then grade = 'A';
+   else if score >= 80 then grade = 'B';
+   else if score >= 70 then grade = 'C';
+   else grade = 'F';
+run;
+We can also use logical operators such as and, or, not depending upon the condition. 
+For further filtering, we can also use where, keep and drop statements in sas. 
+Where: Used to filter rows (observations) based on a condition — kind of like saying “only include data that matches that particular condition".
+The basic syntax is:
+where condition;
+For instance saying i want to keep the data of people whose age >18. 
+data young_adults;
+   set people;
+   where age > 18;
+run;
+Meaning: Only rows where age > 18 are kept in young_adult dataset.
+
+Keep: Used to keep specific variables (columns) in the final dataset.
+We can use keep statement in data step and also in set statement. 
+For instance: 
+data new;
+   set old(keep=id score);
+run;
+
+data new(keep=id score);
+   set old;
+run;
+
+data new;
+ set old;
+ keep id score;
+ run;
+
+KEEP in SET: Limits the variables read from the old dataset (only id and score are read).	Only id and score are read and saved.
+KEEP in DATA Statement (on new):	Reads all variables from old, but then keeps only id and score in the output dataset (new).	Only id and score are saved.
+KEEP inside DATA step (after SET):	Reads all variables from old, and then keeps only id and score in the output dataset (new).	Only id and score are saved.
+
+Drop: Opposite of keep. Again just like keep it can also be used in data and set statements. 
+data new;
+   set old(drop=id score);
+run;
+
+data new(drop =id score);
+   set old;
+run;
+
+data new;
+ set old;
+ drop id score;
+ run;
+In this way we can filter the data we want.
+
