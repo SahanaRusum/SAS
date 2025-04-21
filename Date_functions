@@ -1,0 +1,97 @@
+Some of the date functions that I learned.
+
+FORMAT
+A format controls how SAS displays values (e.g., dates, numbers, etc.).
+You can apply it using the format statement or directly in a data step.
+data example;
+   date = '01JAN2020'd;
+   format date date9.;  /* Format the date */
+run;
+
+proc print data=example;
+run;
+Result: The date will display as 01JAN2020.
+
+INFORMAT
+An informat tells SAS how to read data from an external source (like a file or input).
+It’s used when reading in data (e.g., when using input statements).
+data example;
+   input date :date9.;  /* Informat reads the date */
+   datalines;
+   01JAN2020
+   ;
+run;
+
+proc print data=example;
+run;
+Result: Without a format statement to display the date, the output will show the numeric value of the SAS date (i.e., 21918).
+
+TODAY()
+The TODAY() function returns the current date as a SAS date value (number of days since January 1, 1960).
+
+data example;
+   current_date = today();  /* Get today's date */
+run;
+
+proc print data=example;
+run;
+Result: The current date is displayed as the number of days since January 1, 1960. Thus, we need to format it to display in date format.
+
+ MDY()
+The MDY() function creates a SAS date from a month, day, and year.
+
+data example;
+   date = mdy(12, 25, 2020);  /* Creates a date from month=12, day=25, year=2020 */
+   format date date9.;
+run;
+
+proc print data=example;
+run;
+Result: The created date will display as 25DEC2020.
+
+INPUT()
+Purpose: The INPUT() function converts character data into a numeric value.
+
+data example;
+   char_date = '25DEC2020';
+   num_date = input(char_date, date9.);  /* Converts character to date */
+   format num_date date9.;
+run;
+
+proc print data=example;
+run;
+Result: The character date 25DEC2020 is converted to the SAS date value for that date.
+
+PUT()
+The PUT() function converts numeric or date values to character values.
+data example;
+   num_date = '25DEC2020'd;
+   char_date = put(num_date, date9.);  /* Converts SAS date to character format */
+run;
+proc print data=example;
+run;
+Result: The SAS date value is converted to the character string 25DEC2020.
+
+INTNX()
+The INTNX() function is used to increment or decrement a date, time, or datetime value by a specified interval (e.g., by month, year, etc.).
+data example;
+   date = '01JAN2020'd;
+   new_date = intnx('month', date, 3);  /* Increment by 3 months */
+   format new_date date9.;
+run;
+
+proc print data=example;
+run;
+Result: The new date will be 01APR2020 (3 months later).
+
+NTCK()
+The INTCK() function counts the number of intervals (e.g., months, days) between two date, time, or datetime values.
+data example;
+   date1 = '01JAN2020'd;
+   date2 = '01APR2020'd;
+   months_between = intck('month', date1, date2);  /* Count months between dates */
+run;
+
+proc print data=example;
+run;
+Result: The result will be 3, because there are 3 months between January 1, 2020, and April 1, 2020.
