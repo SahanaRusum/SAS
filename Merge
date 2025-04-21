@@ -1,0 +1,229 @@
+Merge :merging datasets is done using the MERGE statement. The merge operation combines two or more datasets based on common variables (usually key variables).
+Sorting is very importing in merging. One must always sort before merging.
+
+One-to-One Merge
+A one-to-one merge occurs when each observation in one dataset has exactly one matching observation in the other dataset.
+Example:
+Suppose I have two datasets:
+
+data1 (contains ID and value1)
+
+data2 (contains ID and value2)
+
+Both datasets have the same key variable ID, and each ID appears once in both datasets.
+
+data data1;
+   input ID value1;
+   datalines;
+1 10
+2 20
+3 30
+;
+run;
+
+data data2;
+   input ID value2;
+   datalines;
+1 100
+2 200
+3 300
+;
+run;
+
+proc sort data1;
+proc sort data2;
+data merged;
+   merge data1 data2;  /* One-to-one merge based on ID */
+   by ID;
+run;
+proc print data=merged;
+run;
+Result:
+Obs    ID    value1    value2
+1      1     10        100
+2      2     20        200
+3      3     30        300
+2. One-to-Many Merge
+A one-to-many merge occurs when one dataset has multiple observations for each value of the key variable, while the other dataset has only one observation for each key.
+
+Example:
+Suppose I have:
+
+data1 (contains ID and value1), where ID is unique.
+
+data2 (contains ID and value2), where ID can repeat.
+
+data data1;
+   input ID value1;
+   datalines;
+1 10
+2 20
+3 30
+;
+run;
+
+data data2;
+   input ID value2;
+   datalines;
+1 100
+1 110
+2 200
+3 300
+3 310
+3 320
+;
+run;
+proc sort data1;
+proc sort data2;
+data merged;
+   merge data1(in=a) data2(in=b);  /* One-to-many merge */
+   by ID;
+run;
+
+proc print data=merged;
+run;
+Result:
+Obs    ID    value1    value2
+1      1     10        100
+2      1     10        110
+3      2     20        200
+4      3     30        300
+5      3     30        310
+6      3     30        320
+
+Match Merging in SAS
+Match merging combines datasets based on one or more key variables, and uses temporary flags (IN=) to control which observations are included in the output.
+
+data data1;
+   input ID Name $;
+   datalines;
+1 Alice
+2 Bob
+3 Charlie
+;
+run;
+
+data data2;
+   input ID Score;
+   datalines;
+2 85
+3 90
+4 75
+;
+run;
+
+Sort the dataset before, 
+proc sort data=data1;
+proc sort data= data2;
+
+Inner Join (Match in both)
+Keeps only observations where the ID exists in both datasets.
+data inner_join;
+   merge data1(in=a) data2(in=b);
+   by ID;
+   if a and b;
+run;
+ Result:
+ID   Name     Score
+2    Bob      85
+3    Charlie  90
+
+Left Join (All from data1)
+Keeps all observations from data1, with matching info from data2 if available.
+
+data left_join;
+   merge data1(in=a) data2(in=b);
+   by ID;
+   if a;
+run;
+Result:
+ID   Name     Score
+1    Alice     .
+2    Bob      85
+3    Charlie  90
+
+Right Join (All from data2)
+Keeps all observations from data2, with matching info from data1 if available.
+data right_join;
+   merge data1(in=a) data2(in=b);
+   by ID;
+   if b;
+run;
+Result:
+ID   Name     Score
+2    Bob      85
+3    Charlie  90
+4    .        75
+
+Full Outer Join (All from both)
+Keeps all observations from both datasets.
+data full_join;
+   merge data1(in=a) data2(in=b);
+   by ID;
+   if a or b;
+run;
+Result:
+ID   Name     Score
+1    Alice     .
+2    Bob      85
+3    Charlie  90
+4    .        75
+
+if not a or if not a and b
+Nothing from A, only unique observations from B (those not in A)
+data not_in_a;
+   merge data1(in=a) data2(in=b);
+   by ID;
+   if not a;  
+run;
+ Result:
+ID   Name     Score
+4    .        75
+Only ID = 4 is in data2 but not in data1.
+
+ if not b or if not b and a
+Nothing from B, only unique observations from A (those not in B)
+data not_in_b;
+   merge data1(in=a) data2(in=b);
+   by ID;
+   if not b; 
+run;
+Result:
+ID   Name     Score
+1    Alice     .
+Only ID = 1 is in data1 but not in data2.
+
+Not in both
+if not a and not b
+No matches in either → always results in an empty dataset
+This combination never happens in a MERGE, because you're only merging data that exists in either A or B.
+data not_in_both;
+   merge data1(in=a) data2(in=b);
+   by ID;
+   if not a and not b;
+run;
+ Result:
+(No output — 0 observations)
+
+Only in A or B that is Exclusive
+if not b or not a
+Get everything except common values (i.e., drop matches — only unique to A or B)
+data exclusive;
+   merge data1(in=a) data2(in=b);
+   by ID;
+   if not b or not a 
+run;
+Result:
+ID   Name     Score
+1    Alice     .
+4    .        75
+These are IDs only in A or B, but not in both.
+
+if A -left join
+if B - right join
+if A & B - inner join
+if A or B - outer join
+if not A  - nothing from A, only unique obs from B
+if not B  -nothing from B, only unique obs from A
+if not A & not B -Null
+if not B or not A -without the common values from both A & B 
