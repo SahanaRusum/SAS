@@ -1,0 +1,55 @@
+These are common proc methods. 
+
+Proc print: Print a dataset.
+proc print data=sashelp.class;
+run;
+
+Proc contents: Show dataset structure.
+proc contents data=sashelp.class;
+run;
+
+proc means: Get statistics like mean, min, max,n, range, and  all.
+proc means data=sashelp.class;
+   var height weight;
+run;
+Calculates stats - height  and weight variabes from the class dataset.
+
+proc freq: Generates frequency tables — it counts how often each value occurs in a variable.
+Used in categorical data analysis (like gender, region, grade levels, etc.).
+
+proc freq data=sashelp.class;
+   tables sex;
+run;
+This will count how many students are male and female in the class dataset. 
+
+proc sort: Sorts data by variable(s).
+proc sort data=sashelp.class out=sorted;
+   by age;
+run;
+Sorts students by age in ascending order.
+
+proc sort data=sashelp.class out=sorted;
+   by  descending age;
+run;
+Sorts students by age in descending order.
+
+proc transpose: Flip data layout.
+proc transpose data=sashelp.class out=transposed;
+   by name;
+   var height weight;
+run;
+Turns height and weight into rows for each given name in the dataset. 
+
+proc format: To assign user-defined labels to values of variables. Works on numeric or character variables. Helps in making reports cleaner and more understandable.
+proc format;
+   value $genderfmt
+      'M' = 'Male'
+      'F' = 'Female';
+run;
+proc print data=sashelp.class;
+   format sex $genderfmt.;
+   var name sex;
+run;
+Applies the $genderfmt format to the character variable sex. 
+
+
