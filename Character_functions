@@ -1,0 +1,103 @@
+These are some character functions that I leanred. 
+
+||: || (Concatenation Operator)
+Joins character strings with no trimming or separator.
+
+full = 'Hello' || 'World';  /* Result: 'HelloWorld' */
+
+CAT
+Concatenates strings without removing leading/trailing spaces. Delimeter can't be used.
+
+x = cat('Hi ', ' There');  /* Result: 'Hi  There' */
+
+CATT
+Concatenates and trims trailing spaces.  Delimeter can't be used.
+
+x = catt('Hi ', ' There');  /* Result: 'Hi There' */
+
+CATS
+Trims both leading and trailing spaces before joining.  Delimeter can't be used.
+x = cats(' Hi', ' There ');  /* Result: 'HiThere' */
+
+CATX 
+Concatenates with a separator and trims spaces.  Delimeter is used.
+x = catx('-', 'Hello', 'World');  /* Result: 'Hello-World' */
+
+SUBSTR
+Extracts or replaces part of a string.
+x = substr('SASProgramming', 4, 5);  /* Result: 'Progr' */
+
+UPCASE
+Converts text to uppercase.
+x = upcase('hello');  /* Result: 'HELLO' */
+
+LOWCASE
+Converts text to lowercase.
+x = lowcase('HELLO');  /* Result: 'hello' */
+
+PROPCASE
+Capitalizes the first letter of each word.
+x = propcase('sAs is awesome');  /* Result: 'Sas Is Awesome' */
+
+COUNT
+Counts how many times a substring appears.
+
+x = count('banana', 'a');  /* Result: 3 */
+
+INDEX
+Finds position of a substring (0 if not found).
+x = index('Programming', 'gram');  /* Result: 4 */
+
+INDEXC — Index Character
+Finds the position of the first occurrence of any character from a list in a string.
+x = indexc('apple', 'xyzle');  /* Result: 4 */
+It finds 'l' at position 4 — the first character from 'xyzle' found in 'apple'.
+
+INDEXW — Index Word
+Searches for the position of a whole word (delimited by space or punctuation) in a string.
+x = indexw('SAS is cool', 'is');  /* Result: 5 */
+It finds the word 'is' starting at position 5.
+
+SCAN
+Extracts the nth word from a string.
+
+Without specifying delimiter (uses default: space, comma, period, etc.)sas
+x = scan('Red Blue Green', 2);   /* Result: 'Blue' */
+
+With custom delimiter
+x = scan('Red|Blue|Green', 2, '|');  /* Result: 'Blue' */
+SCAN is for word-level extraction based on delimiters.
+
+ TRANSLATE
+Replaces single characters one at a time.
+x=translate(string, replace_character,find_character);
+x = translate('SAS123', 'XYZ', '123');  /* Result: 'SASXYZ' */
+Replaces '1' with 'X', '2' with 'Y', '3' with 'Z' — good for character-by-character substitution.
+
+TRANWRD
+Replaces a full word or substring in a string.
+x=transwrd(string,find_Word,replace_Word);
+x = tranwrd('SAS is fun', 'fun', 'awesome');  /* Result: 'SAS is awesome' */
+ Replaces the full word 'fun' with 'awesome' — great for word or phrase replacement.
+
+FIND 
+Finds the position of a substring within a string (case-sensitive by default).
+FIND(source, substring <, start <, modifier>>)
+source = the full string you're searching in
+substring = what you're looking for
+start (optional) = position to start searching from
+modifier (optional):
+'i' = ignore case
+
+'t' = trim trailing blanks
+
+x = find('SAS Programming', 'gram');   result:8
+Case-insensitive:
+x = find('SAS Programming', 'GRAM', , 'i');   result:8
+i stands for ignore case senitivity.
+ With start position:
+x = find('SAS Programming is cool', 'i', 10);   
+starts from 10th position. i occurs at 13th position so 13 is the result. 
+
+find function: Returns 0 if the substring is not found.
+It’s more flexible than INDEX because it supports modifiers and start position
